@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: custom-prometheus-grafana:latest
+    build:
+      context: grafana
+    network_mode: "host"
+    environment:
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/var/lib/grafana/dashboards/exported_dashboard.json"
