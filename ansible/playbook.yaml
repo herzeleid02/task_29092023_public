@@ -1,0 +1,30 @@
+- name: My first play
+  hosts: myhosts
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+
+   - name: Add user "prometheus"
+     user:
+       name: prometheus
+       groups: prometheus
+       shell: /sbin/nologin
+       create_home: no
+       append: yes
+       comment: "prometheus nologin User"
+       state: present
+     become: true
+
+       ### note -- uid value will be regular -- 1001 in my case. building a package for node-exporter with proper logic would be better 
+
+   - name: Creates directory `/opt/node_exporter`
+     file:
+       path: /opt/node_exporter
+       state: directory
+     become: yes
+
+   - name: Download node_exporter tarball with check (sha256)
+     ansible.builtin.get_url:
+       url: https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+       dest: /tmp/
+       checksum: sha256:ecc41b3b4d53f7b9c16a370419a25a133e48c09dfc49499d63bcc0c5e0cf3d01
