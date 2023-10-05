@@ -1,4 +1,4 @@
 sudo docker run -td --network host -v /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml --name prometheus prom/prometheus
 
 # notes 
-
+apparently now the requirements for ansible are -- version 2.0+
