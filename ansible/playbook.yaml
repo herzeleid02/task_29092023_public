@@ -7,11 +7,11 @@
   - name: Add user "prometheus"
     user:
       name: prometheus
-      groups: prometheus
+        #groups: prometheus
       shell: /sbin/nologin
       create_home: no
-      append: yes
-      comment: "prometheus nologin User"
+        #append: yes
+      create_home: false
       state: present
     become: true
 
@@ -43,3 +43,25 @@
     ansible.builtin.file:
       path: /tmp/node_exporter-1.6.1.linux-amd64.tar.gz
       state: absent
+
+  - name: Copy the servicefile for node_exporter
+    ansible.builtin.copy:
+      src: ./src/prometheus-node_exporter.service
+      dest: /etc/systemd/system/prometheus-node_exporter.service
+      owner: root
+      group: root
+      mode: '0777'
+    become: yes
+
+  - name: Enable the sevice for node_exporter
+    ansible.builtin.systemd:
+      name: prometheus-node_exporter.service
+      enabled: true
+      state: started
+      masked: no
+    become: yes
+
+        #- name: Make sure a service unit is running (node_exporter)
+        #ansible.builtin.systemd:
+        #state: started
+        #name: prometheus-node_exporter.service

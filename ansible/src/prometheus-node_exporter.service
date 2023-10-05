@@ -8,8 +8,7 @@ After=network-online.target
 Restart=always
 User=prometheus
 EnvironmentFile=-/etc/sysconfig/prometheus-node_exporter
-ExecStart=
-/opt/node_exporter/node_exporter-1.6.1.linux-amd64/node_exporter $ARGS
+ExecStart=/opt/node_exporter/node_exporter-1.6.1.linux-amd64/node_exporter $ARGS
 ExecReload=/bin/kill -HUP $MAINPID
 TimeoutStopSec=20s
 SendSIGKILL=no
