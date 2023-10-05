@@ -61,7 +61,62 @@
       masked: no
     become: yes
 
-        #- name: Make sure a service unit is running (node_exporter)
-        #ansible.builtin.systemd:
-        #state: started
-        #name: prometheus-node_exporter.service
+      # this is where docker part starts
+
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    become: yes
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+      state: present
+    become: yes
+
+  - name: Update apt and install docker-ce (and docker-compose)
+    apt:
+      name: docker-ce
+      name: docker-compose
+      state: latest
+      update_cache: true
+    become: yes
+
+  - name: Enable the sevice for dockerd
+    ansible.builtin.systemd:
+      name: docker.service
+      enabled: true
+      state: started
+      masked: no
+    become: yes
+
+## now the tricky parts
+## the proposed process is simple -- it copies the container dir from the local filesystem (since its a git repo) into /opt/task-container
+
+  - name: Creates directory `/opt/task-container`
+    file:
+      path: /opt/task_container
+      state: directory
+      owner: root
+      group: root 
+      mode: '0755'
+    become: yes
+
+  - name: Copy the copy the container dir
+    ansible.builtin.copy:
+      src: ../container/
+      dest: /opt/task-container/
+      owner: root
+      group: root
+      mode: '0777'
+    become: yes
+
+
+  - name: Run `docker-compose up` again
+    community.docker.docker_compose:
+      project_src: /opt/task-container
+      build: true
+    register: output
+    become: yes
+
