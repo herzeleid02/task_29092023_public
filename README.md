@@ -20,4 +20,4 @@ vagrant up
 ```
 
 ## TODO
-+ сборка .deb-пакета node_exporter (как пример -- [openSUSE](https://software.opensuse.org/package/golang-github-prometheus-node_exporter))
++ сборка .deb-пакета node_exporter (как пример -- [openSUSE](https://software.opensuse.org/package/golang-github-prometheus-node_exporter), [Fedora](https://packages.fedoraproject.org/pkgs/golang-github-prometheus-node-exporter/golang-github-prometheus-node-exporter/)))
