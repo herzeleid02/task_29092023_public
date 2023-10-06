@@ -5,7 +5,11 @@ services:
     image: custom-prometheus-grafana:latest
     build:
       context: grafana
-    network_mode: "host"
+    ports:
+      - '3000:3000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
     environment:
       GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/var/lib/grafana/dashboards/1860_rev32.json"
         #
